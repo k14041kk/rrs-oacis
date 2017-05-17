@@ -3,7 +3,7 @@
 namespace adf\controller;
 
 use ZipArchive;
-use Symfony\Component\Finder\Finder;
+//use Symfony\Component\Finder\Finder;
 
 use adf\Config;
 use adf\controller\AbstractController;
@@ -132,12 +132,15 @@ class AgentFileUploadController extends AbstractController {
 		
 		$fileDir = $agentDir . "/" .$fileName."_" . $uuid;
 		
-		$finder = new Finder();
+		//$finder = new Finder();
 		
 		$judgment = 0;
-		
-		if(count($finder->in($fileDir)->files()->name('compile.sh'))>0)$judgment++;
-		if(count($finder->in($fileDir)->files()->name('start.sh'))>0)$judgment++;
+		if(count(glob($fileDir.'/*/compile.sh'))>0)$judgment++;
+		if(count(glob($fileDir.'/compile.sh'))>0)$judgment++;
+		if(count(glob($fileDir.'/*/start.sh'))>0)$judgment++;
+		if(count(glob($fileDir.'/start.sh'))>0)$judgment++;
+		//if(count($finder->in($fileDir)->files()->name('compile.sh'))>0)$judgment++;
+		//if(count($finder->in($fileDir)->files()->name('start.sh'))>0)$judgment++;
 		
 		return $judgment>1;
 		

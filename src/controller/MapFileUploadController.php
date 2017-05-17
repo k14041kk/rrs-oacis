@@ -3,7 +3,7 @@
 namespace adf\controller;
 
 use ZipArchive;
-use Symfony\Component\Finder\Finder;
+//use Symfony\Component\Finder\Finder;
 
 use adf\Config;
 use adf\controller\AbstractController;
@@ -130,12 +130,17 @@ class MapFileUploadController extends AbstractController {
 		
 		$fileDir = $agentDir . "/" .$fileName."_" . $uuid;
 		
-		$finder = new Finder();
+		//$finder = new Finder();
 		
 		$judgment = 0;
 		
-		if(count($finder->in($fileDir)->directories()->name('config'))>0)$judgment++;
-		if(count($finder->in($fileDir)->directories()->name('map'))>0)$judgment++;
+		if(count(glob($fileDir.'/*/config'))>0)$judgment++;
+		if(count(glob($fileDir.'/config'))>0)$judgment++;
+		if(count(glob($fileDir.'/*/map'))>0)$judgment++;
+		if(count(glob($fileDir.'/map'))>0)$judgment++;
+		
+		//if(count($finder->in($fileDir)->directories()->name('config'))>0)$judgment++;
+		//if(count($finder->in($fileDir)->directories()->name('map'))>0)$judgment++;
 		
 		return $judgment>1;
 		
