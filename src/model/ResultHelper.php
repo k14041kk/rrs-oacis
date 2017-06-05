@@ -152,7 +152,14 @@ class ResultHelper{
 		
 		$MAX = [];
 		
+		$MIN = [];
+		
 		$AVERAGE = [];
+		
+		$SM = [];
+		
+		
+		$TEAM_SIZE = 0;
 		
 		$STEP_SIZE = 0;
 		
@@ -162,16 +169,18 @@ class ResultHelper{
 		
 		foreach ($teams as $key => $value){
 			$maps = $value->getMaps();
-			$STEP_SIZE++;
+			$TEAM_SIZE++;
 		}
 		
-		$SDC = $STEP_SIZE;
+		$SDC = 2;
 		
-		$STEP_SIZE *= 2;
+		$STEP_SIZE = $TEAM_SIZE * $SDC;
+		
+		$MAX_SCORE = $STEP_SIZE;
 		
 		//$SDC = 4;
 		//(2)
-		$MSkj = $SDC * 2;
+		//$MSkj = $SDC * 3;
 		
 		foreach ($maps as $key => $value){
 			
@@ -182,6 +191,7 @@ class ResultHelper{
 				if($MAX[$key]<$score['score']){
 					$MAX[$key] = $score['score'];
 				}
+			
 				
 				if(!isset($MAP_Scores[$key])){
 					$MAP_Scores[$key] = [];
@@ -191,8 +201,13 @@ class ResultHelper{
 				
 			}
 			
+			$MIN[$key] = min($MAP_Scores[$key]);
+			
+			
 			$AVERAGE[$key]= array_sum($MAP_Scores[$key]) / count($MAP_Scores[$key]);
 		
+			//$SM[$key] = $MAX[$key]- ($MAX[$key]- $AVERAGE[$key])
+			
 			//(1)
 			$SMkj[$key] = $MAX[$key] - (($MAX[$key]-$AVERAGE[$key])*2 );
 			
@@ -200,24 +215,54 @@ class ResultHelper{
 			
 			$MSS[$key] = [];
 			
+			$MSS[$key][] = 0;
+			
+			
+			
+			//echo $MAX[$key] . ': ' .$MIN[$key].' : '.$MAX_SCORE." ; ";
+			
 			for($i=1; $i<=$STEP_SIZE;$i++){
 				
 				//(3)
-				$zore = ($MSkj*($MSkj-$i));
-				if($zore==0)$zore=1;
+				//$zore = ($MSkj*($MSkj-$i));
+				//if($zore==0)$zore=1;
 				
-				$mss = ($MAX[$key]-$SMkj[$key])/$zore;
+				//echo $MSkj . ' : ' . $i .'<br>';
 				
-				$MSS[$key][] = $mss * 90;
+				//$mss = ($MAX[$key]-$SMkj[$key])/$zore;
+				
+				//$MSS[$key][] = $mss;
+				
+				$mss1 = $MAX[$key]- ( ($MAX[$key]-$SMkj[$key]) / $MAX_SCORE * ($MAX_SCORE- $i));
+				
+				$MSS[$key][] = $mss1;
+				
+				//if('Joao2'==$key)echo $mss1.' ';
 				
 				//var_dump($SMkj[$key]);
 				
 				
 			}
 			
+			//echo $key . ' : ' . $MSS[$key][15] . '<br>';
+			
 			rsort($STEP[$key]);
 			
-			foreach ($teams as $key1 => $value1){
+			$key_id2 = [];
+			
+			$teams2 = $teams;
+			foreach ($teams2 as $te2=> $te2value){
+				$key_id2[$te2] = $te2value->getScore($key)['score'];
+			}
+			array_multisort ( $key_id2 , SORT_DESC, $teams2);
+			
+			$old_point = [];
+			
+			//echo '<br>';
+			
+			foreach ($teams2 as $key1 => $value1){
+				
+				//echo $key1 .' ';
 				
 				$point = -1;
 				
@@ -225,9 +270,11 @@ class ResultHelper{
 				
 				//echo $tScore . '<br>';
 				
-				if($MSS[$key][0] > $tScore){
-					$point = 0;
+				if($MSS[$key][1] > $tScore){
+					$point = 1;
 				}
+				
+				
 				
 				for($i=1; $i<=$STEP_SIZE;$i++){
 					
@@ -236,13 +283,21 @@ class ResultHelper{
 						$point = $STEP_SIZE; 
 					}else if($MSS[$key][$i] < $tScore && $tScore < $MSS[$key][$i+1]){
 						//(4)
-						$point = $i;
+						if(isset($old_point[$i])){
+							$point = $i-1;
+							$old_point[$i-1] = true;
+						}else{
+							$point = $i;
+							$old_point[$i] = true;
+						}
+						
+						
 					}
 					
 				}
 				
 				if($tScore==0){
-					$point = 0;
+					$point = 1;
 				}
 				
 				//echo $key . ' ' .$key1. " ! <br>";
@@ -262,9 +317,12 @@ class ResultHelper{
 				
 				//var_dump($STEP[$key]);
 				
-				$value1->setPoint($key,$point);
+				$teams[$key1]->setPoint($key,$point);
+				//$value1->setPoint($key,$point);
 				
 			}
+			
+			
 			
 		}
 		
