@@ -42,6 +42,16 @@ class Router {
 		//パラメーターをOacisに登録
 		$router->controller('/add_parameter', 'adf\\controller\\OacisAddParameterController');
 		
+		//結果画面
+		//パラメーターをOacisに登録
+		$router->controller('/result', 'adf\\controller\\ResultController');
+		
+		$router->controller('/result_final', 'adf\\controller\\ResultFinalController');
+		
+		$router->controller('/result_json', 'adf\\controller\\ResultJsonController');
+		
+		$router->controller('/result_simple', 'adf\\controller\\ResultSimpleController');
+		
 		// Print out the value returned from the dispatched function
 		try {
 			
