@@ -70,7 +70,7 @@ class ResultHelper{
 		$key_id = [];
 		
 		foreach ($teams as $key => $value){
-			$key_id[$key] = $value->getTotalScore();
+			$key_id[$key] = $value->getTotalScore()['point'];
 		}
 		array_multisort ( $key_id , SORT_DESC, $teams);
 		
@@ -121,6 +121,27 @@ class ResultHelper{
 		
 	}
 	
+	public static function addRank(array $teams){
+		
+		//Add rank
+		$key_id = [];
+		
+		$teams2 = $teams;
+		foreach ($teams2 as $key => $value){
+			$key_id[$key] = $value->getTotalScore()['points'];
+		}
+		array_multisort ( $key_id , SORT_DESC, $teams2);
+		
+		$rank = 1;
+		foreach ($teams2 as $key => $value){
+			
+			$teams[$key]->setRank($rank);
+			$rank++;
+		}
+		
+	}
+	
+	//TODO 
 	public static function calPoints(array $teams){
 		
 		//TODO 
@@ -187,7 +208,7 @@ class ResultHelper{
 				
 				$mss = ($MAX[$key]-$SMkj[$key])/$zore;
 				
-				$MSS[$key][] = $mss * 100;
+				$MSS[$key][] = $mss * 90;
 				
 				//var_dump($SMkj[$key]);
 				
@@ -198,13 +219,19 @@ class ResultHelper{
 			
 			foreach ($teams as $key1 => $value1){
 				
-				$point = 0;
+				$point = -1;
 				
 				$tScore = $value1->getScore($key)['score'];
 				
+				//echo $tScore . '<br>';
+				
+				if($MSS[$key][0] > $tScore){
+					$point = 0;
+				}
+				
 				for($i=1; $i<=$STEP_SIZE;$i++){
 					
-					if($i==$STEP_SIZE && $point==0){
+					if($point==-1 && $i==$STEP_SIZE){
 						//(5)
 						$point = $STEP_SIZE; 
 					}else if($MSS[$key][$i] < $tScore && $tScore < $MSS[$key][$i+1]){
@@ -212,20 +239,22 @@ class ResultHelper{
 						$point = $i;
 					}
 					
-					
-					
 				}
 				
-				echo $key . ' ' .$key1. " ! <br>";
-				
-				for($i=1; $i<=$STEP_SIZE;$i++){
-					echo $MSS[$key][$i] . " | ";
+				if($tScore==0){
+					$point = 0;
 				}
+				
+				//echo $key . ' ' .$key1. " ! <br>";
+				
+				//for($i=1; $i<=$STEP_SIZE;$i++){
+				//	echo $MSS[$key][$i] . " | ";
+				//}
 				
 				//var_dump($MSS[$key]);
-				echo '<br> <br>';
+				//echo '<br> <br>';
 				
-				$point = $STEP[$key][$value1->getRank()-1];
+				//$point = $STEP[$key][$value1->getRank()-1];
 				
 				$point = round($point,2);
 				

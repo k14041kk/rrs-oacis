@@ -5,7 +5,7 @@ use \adf\model\ResultTeam;
 
 class ResultGeneration{
 	
-	public static function generateHTML($year,array $mapNames,array $teamResult, $day1ID = null){
+	public static function generateHTML($year,array $mapNames,array $teamResult, $day1ID = null, $presentation = null){
 		
 		$html = '';
 		
@@ -16,7 +16,7 @@ class ResultGeneration{
 		
 		$html .= self::getTableHeader($mapNames,$day1ID);
 		
-		$html .= self::getTableMain($mapNames, $teamResult,$day1ID);
+		$html .= self::getTableMain($mapNames, $teamResult,$day1ID,$presentation);
 		
 		$html .= '</table>'."\n";
 		
@@ -102,11 +102,16 @@ class ResultGeneration{
 		
 	}
 	
-	private function getTableMain(array $mapNames,array $teamResult, $day1ID = null){
+	private function getTableMain(array $mapNames,array $teamResult, $day1ID = null,array $presentation = null){
 		
 		$main = '';
 	
 		foreach($teamResult as $name => $value){
+			
+			//Add $presentation
+			if($presentation!=null){
+				$value->addPresentation($presentation[$name]);
+			}
 			
 			$colorClass = "";
 			switch($value->getColorType()){
@@ -131,13 +136,39 @@ class ResultGeneration{
 			}
 			
 			if($day1ID!=null){
-				$main .= '  <td>'.'?'.'</td>'.'<td>'.'?'.'</td>'."\n";
+				
+				$day1parameterSets= ResultHelper::getParameterSets($day1ID);
+				
+				$day1maps = ResultHelper::getMaps($day1parameterSets);
+				
+				$day1teams = ResultHelper::getTeams($day1ID, $day1parameterSets);
+				
+				ResultHelper::calPoints($day1teams);
+				
+				$day1team = $day1teams[$name];
+				
+				$result = $day1team->getTotalScore();
+				$day1Score = isset($result['score']) ? $result['score'] : 'none';
+				$day1points = isset($result['points']) ? $result['points'] : 'none';
+				
+				$main .= '  <td>'.$score.'</td>'.'<td>'.$points.'</td>'."\n";
+				
+				//Total
+				$total = $value->getTotalScore();
+				$tS= ($total['score']+ ($day1Score=='none' ? 0:$day1Score) );
+				$tP= ($total['points']+($day1points=='none' ? 0:$day1points));
+				
+				$main .= '  <td>'.$tS.'</td>'.'<td>'.$tP.'</td>'."\n";
+				
+			}else{
+			
+				//Total
+				$total = $value->getTotalScore();
+				$main .= '  <td>'.$total['score'].'</td>'.'<td>'.$total['points'].'</td>'."\n";
 				
 			}
 			
-			//Total
-			$total = $value->getTotalScore();
-			$main .= '  <td>'.$total['score'].'</td>'.'<td>'.$total['points'].'</td>'."\n";
+			
 			
 			//Rnak
 			$main .= '  <td>'.$value->getRank().'</td>'."\n";

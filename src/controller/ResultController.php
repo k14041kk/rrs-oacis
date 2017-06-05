@@ -29,21 +29,6 @@ class ResultController extends AbstractController{
 			//Test
 			$teams = Result2016::getTeams();
 			
-			$key_id = [];
-			
-			$teams2 = $teams;
-			foreach ($teams2 as $key => $value){
-				$key_id[$key] = $value->getTotalScore();
-			}
-			array_multisort ( $key_id , SORT_DESC, $teams2);
-			
-			$rank = 1;
-			foreach ($teams2 as $key => $value){
-				
-				$teams[$key]->setRank($rank);
-				//$value->setRank($rank);
-				$rank++;
-			}
 			
 		}else{
 			
@@ -57,7 +42,11 @@ class ResultController extends AbstractController{
 		
 		ResultHelper::calPoints($teams);
 		
-		echo ResultGeneration::generateHTML('2018', $maps, $teams, false);
+		ResultHelper::addRank($teams);
+		
+		//echo ResultGeneration::generateHTML('2018', $maps, $teams, '592fe0a36653ff00f53567c2',null);
+		
+		echo ResultGeneration::generateHTML('2018', $maps, $teams, '592fe0a36653ff00f53567c2',null);
   	
   }
   

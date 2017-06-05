@@ -20,6 +20,8 @@ class ResultTeam implements JsonSerializable{
 	
 	private $color;
 	
+	private $presentationPoint = 0;
+	
 	public function __construct(String $teamName)
 	{
 		
@@ -50,6 +52,10 @@ class ResultTeam implements JsonSerializable{
 		return $this->maps[$mapName];
 	}
 	
+	public function addPresentation($points){
+		$this->presentationPoint= $points;
+	}
+	
 	public function getTotalScore(){
 	
 		$result = [];
@@ -66,6 +72,10 @@ class ResultTeam implements JsonSerializable{
 		if($oldDay!=null){
 			$result['score'] += $oldDay['score'];
 			$result['points'] += $oldDay['points'];
+		}
+		
+		if($this->presentationPoint>0){
+			$result['points'] += $this->presentationPoint;
 		}
 		
 		return $result;
