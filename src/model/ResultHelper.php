@@ -237,12 +237,11 @@ class ResultHelper{
 				
 				$MSS[$key][] = $mss1;
 				
-				//if('Joao2'==$key)echo $mss1.' ';
-				
 				//var_dump($SMkj[$key]);
 				
 				
 			}
+			
 			
 			//echo $key . ' : ' . $MSS[$key][15] . '<br>';
 			
@@ -283,13 +282,23 @@ class ResultHelper{
 						$point = $STEP_SIZE; 
 					}else if($MSS[$key][$i] < $tScore && $tScore < $MSS[$key][$i+1]){
 						//(4)
+						
+						for($i1 = $i;$i1>=1;$i1--){
+							if(!isset($old_point[$i1])){
+								$point = $i1;
+								$old_point[$i1] = true;
+								break;
+							}
+						}
+						/*
 						if(isset($old_point[$i])){
 							$point = $i-1;
 							$old_point[$i-1] = true;
 						}else{
 							$point = $i;
 							$old_point[$i] = true;
-						}
+							echo isset($old_point[$i]);
+						}*/
 						
 						
 					}
