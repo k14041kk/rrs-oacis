@@ -58,6 +58,8 @@ class ResultMapController extends AbstractController{
 	
 	
 	//simulator , map , team, type
+	//Not use curl
+	/*
 	public function anyImages($simulatorID,$map,$team,$type)
 	{
 		//Getteam
@@ -103,7 +105,7 @@ class ResultMapController extends AbstractController{
 			header('Content-Type: text/plain', true, 400);
 			echo 'Bad Request for Simple PHP Proxy: ' . curl_error($ch);
 		}
-	}
+	}*/
 	
 	
 	

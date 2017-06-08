@@ -21,7 +21,7 @@ RUN apt-get -y install php
 RUN apt-get -y install php-mbstring
 RUN apt-get -y install libzip2
 RUN apt-get -y install php7.0-zip
-RUN apt-get -y install php-curl
+#RUN apt-get -y install php-curl
 
 #ADF 
 RUN mkdir /home/oacis/adf

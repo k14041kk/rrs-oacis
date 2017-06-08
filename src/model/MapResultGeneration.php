@@ -7,7 +7,6 @@ use adf\Config;
 
 class MapResultGeneration{
 	
-	
 	public static function generateHTML($year,$simulatorID,$mapName,array $teamResult,array $step){
 		
 		$html = '';
@@ -72,7 +71,10 @@ class MapResultGeneration{
 		
 		foreach($teamResult as $name => $value){
 			
-			$mapurl = Config::$RESOURCE_PATH.'result_map/images/'.$simulatorID.'/'.$mapName.'/'.$name.'/snapshot-init';
+			//$mapurl = Config::$RESOURCE_PATH.'result_map/images/'.$simulatorID.'/'.$mapName.'/'.$name.'/snapshot-init';
+			
+			$mapurl = $value->getMapLogURI($mapName).'/snapshot-init';
+			
 			
 			$initMap .='<div class="init-map">';
 			
@@ -118,9 +120,10 @@ class MapResultGeneration{
 		
 		foreach($teamResult as $name => $value){
 			
-			//$mapurl = $value->getMapLogURI($mapName);
+			$mapurl = $value->getMapLogURI($mapName);
 			
-			$mapurl = Config::$RESOURCE_PATH.'result_map/images/'.$simulatorID.'/'.$mapName.'/'.$name;
+			//$mapurl = Config::$RESOURCE_PATH.'result_map/images/'.$simulatorID.'/'.$mapName.'/'.$name;
+			
 			
 			//$main.= $mapurl;
 			
