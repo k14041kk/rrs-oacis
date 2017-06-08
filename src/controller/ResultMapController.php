@@ -30,7 +30,7 @@ class ResultMapController extends AbstractController{
 		
 		$step = ResultHelper::getMapStepArray($stepSize);
 		
-		echo MapResultGeneration::generateHTML('2018', $simulatorID, $mapName, $teams,$step);
+		return MapResultGeneration::generateHTML('2018', $simulatorID, $mapName, $teams,$step);
 		
 		
 	}
@@ -52,6 +52,29 @@ class ResultMapController extends AbstractController{
 			$teams[$key]->setRank($rank);
 			$rank++;
 		}
+		
+	}
+	
+	public function downloadHTML($simulatorID= null,$mapName= null){
+		
+		//Getteam
+		$parameterSets= ResultHelper::getParameterSets($simulatorID);
+		
+		$maps = ResultHelper::getMaps($parameterSets);
+		
+		$teams = ResultHelper::getTeams($simulatorID, $parameterSets,true);
+		
+		ResultHelper::calPoints($teams);
+		
+		ResultHelper::addRank($teams);
+		
+		$this->addMapRank($teams, $mapName);
+		
+		$stepSize = ResultHelper::getMapStep4Teams($teams, $mapName);
+		
+		$step = ResultHelper::getMapStepArray($stepSize);
+		
+		return MapResultGeneration::generateHTML('2018', $simulatorID, $mapName, $teams,$step);
 		
 	}
 	

@@ -75,6 +75,10 @@ class MapResultGeneration{
 			
 			$mapurl = $value->getMapLogURI($mapName).'/snapshot-init';
 			
+			if($value->isDownload()){
+				$mapurl = './'.$name.'/'.Config::MAP_LOG . '/snapshot-init.png';
+			}
+			
 			
 			$initMap .='<div class="init-map">';
 			
@@ -124,6 +128,9 @@ class MapResultGeneration{
 			
 			//$mapurl = Config::$RESOURCE_PATH.'result_map/images/'.$simulatorID.'/'.$mapName.'/'.$name;
 			
+			if($value->isDownload()){
+				$mapurl = './'.$name.'/'.Config::MAP_LOG;
+			}
 			
 			//$main.= $mapurl;
 			
@@ -154,6 +161,9 @@ class MapResultGeneration{
 			
 			for($i=0;$i<count($scores);$i++){
 				$URL_S = $mapurl . '/snapshot-'.$scores[$i];
+				if($value->isDownload()){
+					$URL_S .='.png';
+				}
 				$main .='<td><a href="'.$URL_S.'">';
 				$main .='<img src='.$URL_S.'" width="100" height="75" alt="Map at turn '.$scores[$i].'" />';
 				$main .='</a><br />'.round($mapScores[$scores[$i]-1],4).'</td>';

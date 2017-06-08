@@ -7,7 +7,7 @@ use adf\Config;
 
 class ResultGeneration{
 	
-	public static function generateHTML($year,$simulatorID,array $mapNames,array $teamResult, $day1ID = null, $presentation = null){
+	public static function generateHTML($year,$simulatorID,array $mapNames,array $teamResult, $day1ID = null, $presentation = null,$download = false){
 		
 		$html = '';
 		
@@ -16,11 +16,15 @@ class ResultGeneration{
 		
 		$html .= '<body>';
 		
-		$html .= self::getTableHeader($simulatorID,$mapNames,$day1ID);
+		$html .= self::getTableHeader($simulatorID,$mapNames,$day1ID,$download);
 		
 		$html .= self::getTableMain($mapNames, $teamResult,$day1ID,$presentation);
 		
 		$html .= '</table>'."\n";
+		
+		if(!$download){
+			$html .= '<a href="'.Config::$RESOURCE_PATH.'/result_download/'.$simulatorID.'">Download</a>';
+		}
 		
 		$html .= '</body>'."\n";
 		$html .= '</html>';
@@ -55,7 +59,7 @@ class ResultGeneration{
 		
 	}
 	
-	private function getTableHeader($simulatorID,array $mapNames, $day1ID = null){
+	private function getTableHeader($simulatorID,array $mapNames, $day1ID = null,$download = false){
 		
 		$head = '';
 		$head .= 
@@ -66,9 +70,13 @@ class ResultGeneration{
 			
 			$mapName= $mapNames[$i];
 			
-			$head .= 
-			'  <th colspan="2"><a target="_blank" href="'.Config::$RESOURCE_PATH.'result_map/'.$simulatorID.'/'.$mapName.'">'.$mapName.'</a></th>  '. "\n";
-			
+			if(!$download){
+				$head .= 
+				'  <th colspan="2"><a target="_blank" href="'.Config::$RESOURCE_PATH.'result_map/'.$simulatorID.'/'.$mapName.'">'.$mapName.'</a></th>  '. "\n";
+			}else{
+				$head .=
+				'  <th colspan="2"><a target="_blank" href="./result_map/'.$simulatorID.'/'.$mapName.'/index.html">'.$mapName.'</a></th>  '. "\n";
+			}
 		}
 		
 		//TODO oldDay

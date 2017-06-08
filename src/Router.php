@@ -54,6 +54,8 @@ class Router {
 		
 		$router->controller('/result_map', 'adf\\controller\\ResultMapController');
 		
+		$router->controller('/result_download', 'adf\\controller\\ResultDownloadController');
+		
 		// Print out the value returned from the dispatched function
 		try {
 			

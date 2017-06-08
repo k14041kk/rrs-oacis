@@ -35,7 +35,7 @@ class ResultHelper{
 		
 	}
 	
-	public static function getTeams(String $simulatorID ,array $parameterSets){
+	public static function getTeams(String $simulatorID ,array $parameterSets,$download = false){
 		
 		$teams = [];
 		
@@ -48,7 +48,7 @@ class ResultHelper{
 			$team;
 			
 			if(! isset($teams[$teamName])){
-				$teams[$teamName] = new ResultTeam($teamName);
+				$teams[$teamName] = new ResultTeam($teamName,$download);
 			}
 			
 			$team = $teams[$teamName];
