@@ -21,13 +21,15 @@ RUN apt-get -y install php
 RUN apt-get -y install php-mbstring
 RUN apt-get -y install libzip2
 RUN apt-get -y install php7.0-zip
+RUN apt-get -y install php-curl
 
 #ADF 
 RUN mkdir /home/oacis/adf
 RUN mkdir /home/oacis/adf/rrsenv
 WORKDIR /home/oacis/adf
 RUN git clone https://github.com/tkmnet/rrsenv.git
-RUN ./rrsenv/init.sh
+#RUN mkdir ./rrsenv/init.sh
+RUN ./rrsenv/init.sh || true
 
 
 #ADF-Oacis

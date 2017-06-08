@@ -22,11 +22,19 @@ class ResultTeam implements JsonSerializable{
 	
 	private $presentationPoint = 0;
 	
+	private $maplog;
+	
+	private $mapScores;
+	
+	private $mapInitScores;
+	
 	public function __construct(String $teamName)
 	{
 		
 		$this->teamName = $teamName;
 		$this->maps = [];
+		$this->mapScores = [];
+		$this->mapInitScores = [];
 		
 	}
 	
@@ -102,6 +110,7 @@ class ResultTeam implements JsonSerializable{
 		return $this->logLink;
 	}
 	
+	
 	/***
 	 * Set Background Color
 	 * @param int $color 0, 1, 2, 3 : white, blue, silver, gold
@@ -112,6 +121,32 @@ class ResultTeam implements JsonSerializable{
 	
 	public function getColorType(){
 		return $this->color;
+	}
+	
+	public function addMapLogURI($mapName,$uri){
+		
+		$this->maps[$mapName]['maplog'] = $uri;
+		
+	}
+	
+	public function getMapLogURI($mapName){
+		return $this->maps[$mapName]['maplog'];
+	}
+	
+	public function addMapScores($mapName,$score){
+		$this->mapScores[$mapName] = $score;
+	}
+	
+	public function addMapInitScores($mapName,$score){
+		$this->mapInitScores[$mapName] = $score;
+	}
+	
+	public function getMapScores($mapName){
+		return $this->mapScores[$mapName];
+	}
+	
+	public function getMapInitScores($mapName){
+		return $this->mapInitScores[$mapName];
 	}
 	
 	public function jsonSerialize()

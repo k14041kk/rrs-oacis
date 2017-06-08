@@ -43,6 +43,9 @@ class Config{
 	
 	static $ROUTER_PATH = "/";
 	
+	//マップのlogを入れていおくフォルダ
+	const MAP_LOG = 'maplog';
+	
 }
 
 ?>

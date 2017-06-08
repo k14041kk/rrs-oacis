@@ -2,10 +2,12 @@
 namespace adf\model;
 
 use \adf\model\ResultTeam;
+use adf\Config;
+
 
 class ResultGeneration{
 	
-	public static function generateHTML($year,array $mapNames,array $teamResult, $day1ID = null, $presentation = null){
+	public static function generateHTML($year,$simulatorID,array $mapNames,array $teamResult, $day1ID = null, $presentation = null){
 		
 		$html = '';
 		
@@ -14,7 +16,7 @@ class ResultGeneration{
 		
 		$html .= '<body>';
 		
-		$html .= self::getTableHeader($mapNames,$day1ID);
+		$html .= self::getTableHeader($simulatorID,$mapNames,$day1ID);
 		
 		$html .= self::getTableMain($mapNames, $teamResult,$day1ID,$presentation);
 		
@@ -46,13 +48,14 @@ class ResultGeneration{
 				'		float:left;  '. "\n".
 				'		text-align:center;  '. "\n".
 				'	}  '. "\n".
+				'	td { white-space: nowrap; }  '. "\n".
 				'</style>  '. "\n".
 				' '. "\n".
 				'</head>  '. "\n";
 		
 	}
 	
-	private function getTableHeader(array $mapNames, $day1ID = null){
+	private function getTableHeader($simulatorID,array $mapNames, $day1ID = null){
 		
 		$head = '';
 		$head .= 
@@ -64,7 +67,7 @@ class ResultGeneration{
 			$mapName= $mapNames[$i];
 			
 			$head .= 
-			'  <th colspan="2"><a target="_blank" href="null.html">'.$mapName.'</a></th>  '. "\n";
+			'  <th colspan="2"><a target="_blank" href="'.Config::$RESOURCE_PATH.'result_map/'.$simulatorID.'/'.$mapName.'">'.$mapName.'</a></th>  '. "\n";
 			
 		}
 		

@@ -2,6 +2,8 @@
 namespace adf\model;
 
 use \adf\model\ResultTeam;
+use \adf\model\MapScoreTest;
+use adf\Config;
 
 class ResultHelper{
 	
@@ -64,6 +66,11 @@ class ResultHelper{
 			
 			$team->addMapResult($m, $score, 100);
 			
+			$team->addMapLogURI($m, self::getMapImageURI($simulatorID, $parameterID, $runID));
+			
+			$team->addMapScores($m, self::getMapScores($simulatorID, $parameterSetID, $runID));
+			
+			$team->addMapInitScores($m, self::getMapInitScores($simulatorID, $parameterSetID, $runID));
 			
 		}
 		
@@ -106,7 +113,7 @@ class ResultHelper{
 	
 	public static function get_stdout_txt($simulatorID, $parameterSetID, $runID){
 		
-		return rand(50,70);
+		//return rand(50,70);
 		
 		$rawData = 
 		file_get_contents('http://0.0.0.0:3000/Result_development/'.$simulatorID.'/'.$parameterSetID.'/'.$runID.'/_stdout.txt');
@@ -114,6 +121,40 @@ class ResultHelper{
 		//get rescue score
 		$rawData2 =
 		@file_get_contents('http://0.0.0.0:3000/Result_development/'.$simulatorID.'/'.$parameterSetID.'/'.$runID.'/score.txt');
+		
+		if($rawData2!=null)$rawData = $rawData2;
+		
+		return $rawData;
+		
+	}
+	
+	public static function getMapImageURI($simulatorID, $parameterSetID, $runID){
+		
+		return 'http://0.0.0.0:3000/Result_development/'.$simulatorID.'/'.$parameterSetID.'/'.$runID.'/'.Config::MAP_LOG;
+		
+	}
+	
+	public static function getMapScores($simulatorID, $parameterSetID, $runID){
+		
+		$rawData = MapScoresTest::getScoreTests();
+		
+		//get rescue score
+		$rawData2 =
+		@file_get_contents('http://0.0.0.0:3000/Result_development/'.$simulatorID.'/'.$parameterSetID.'/'.$runID.'/'.Config::MAP_LOG.'/scores.txt');
+		
+		if($rawData2!=null)$rawData = $rawData2;
+		
+		return $rawData;
+		
+	}
+	
+	public static function getMapInitScores($simulatorID, $parameterSetID, $runID){
+		
+		$rawData = 6.0;
+		
+		//get rescue score
+		$rawData2 =
+		@file_get_contents('http://0.0.0.0:3000/Result_development/'.$simulatorID.'/'.$parameterSetID.'/'.$runID.'/'.Config::MAP_LOG.'/init-score.txt');
 		
 		if($rawData2!=null)$rawData = $rawData2;
 		
@@ -140,6 +181,8 @@ class ResultHelper{
 		}
 		
 	}
+	
+	
 	
 	//TODO 
 	public static function calPoints(array $teams){
