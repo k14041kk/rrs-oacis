@@ -68,9 +68,11 @@ class ResultHelper{
 			
 			$team->addMapLogURI($m, self::getMapImageURI($simulatorID, $parameterID, $runID));
 			
-			$team->addMapScores($m, self::getMapScores($simulatorID, $parameterSetID, $runID));
+			$team->addMapScores($m, self::getMapScores($simulatorID, $parameterID, $runID));
 			
-			$team->addMapInitScores($m, self::getMapInitScores($simulatorID, $parameterSetID, $runID));
+			$team->addMapInitScores($m, self::getMapInitScores($simulatorID, $parameterID, $runID));
+			
+			//echo self::getMapStep($simulatorID, $parameterID, $runID);
 			
 		}
 		
@@ -159,6 +161,28 @@ class ResultHelper{
 		if($rawData2!=null)$rawData = $rawData2;
 		
 		return $rawData;
+		
+	}
+	
+	public static function getMapStep($simulatorID, $parameterSetID, $runID){
+		
+		$rawData = 6.0;
+		
+		$file_url = '~/oacis/public/Result_development/work/'.$simulatorID.'/'.$parameterSetID.'/'.$runID.'/';
+		
+		//get rescue score
+		$rawData2 =
+		@file_get_contents('~/oacis/public/Result_development/work');//'.$simulatorID.'/'.$parameterSetID.'/'.$runID.'/');
+		
+		$files1 = @scandir('~/oacis/public/Result_development/work');
+		print_r($files1);
+		
+		$iterator = glob($file_url.'*.png');
+		
+		if($rawData2!=null)$rawData = count($iterator);
+		
+		return $rawData;
+		
 		
 	}
 	

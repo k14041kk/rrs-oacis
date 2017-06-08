@@ -8,7 +8,7 @@ use adf\Config;
 class MapResultGeneration{
 	
 	
-	public static function generateHTML($year,$simulatorID,$mapName,array $teamResult){
+	public static function generateHTML($year,$simulatorID,$mapName,array $teamResult,array $step){
 		
 		$html = '';
 		
@@ -24,9 +24,9 @@ class MapResultGeneration{
 		$html .= '<br />' . "\n";
 		
 		
-		$html .= self::getTableHeader($simulatorID);
+		$html .= self::getTableHeader($simulatorID,$step);
 		
-		$html .= self::getTableMain($simulatorID,$teamResult,$mapName);
+		$html .= self::getTableMain($simulatorID,$teamResult,$mapName,$step);
 		
 		$html .= '</table>'."\n";
 		
@@ -92,19 +92,26 @@ class MapResultGeneration{
 		
 	}
 	
-	private function getTableHeader($simulatorID){
+	private function getTableHeader($simulatorID,$step){
 		
 		$head = '';
 		
 		$head .= '<table border="2" cellspacing="0" cellpadding="5">';
 		
-		$head .= '<tr ><th>Team</th><th>Score</th><th>Points</th><th>50</th><th>100</th><th>150</th><th>200</th><th>250</th><th>300</th><th>Logfile</th></tr>';
+		$head .= '<tr ><th>Team</th><th>Score</th><th>Points</th>';
+		
+		
+		for($i=0;$i<count($step);$i++){
+			$head .= '<th>'.$step[$i].'</th>';
+		}
+		
+		$head .= '<th>Logfile</th></tr>';
 		
 		return $head;
 		
 	}
 	
-	private function getTableMain($simulatorID,$teamResult,$mapName){
+	private function getTableMain($simulatorID,$teamResult,$mapName,$step){
 		
 		
 		$main = '';
@@ -140,7 +147,7 @@ class MapResultGeneration{
 			
 			$main .= '<td>'.$score['score'].'</td><td>'.$score['points'].'</td>';
 			
-			$scores = ['50','100','150','200','250','300'];
+			$scores = $step;//['50','100','150','200','250','300'];
 			
 			for($i=0;$i<count($scores);$i++){
 				$URL_S = $mapurl . '/snapshot-'.$scores[$i];

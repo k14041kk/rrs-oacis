@@ -26,7 +26,9 @@ class ResultMapController extends AbstractController{
 		
 		$this->addMapRank($teams, $mapName);
 		
-		echo MapResultGeneration::generateHTML('2018', $simulatorID, $mapName, $teams);
+		$step = ['50','100','150','200','250'];
+		
+		echo MapResultGeneration::generateHTML('2018', $simulatorID, $mapName, $teams,$step);
 		
 		
 		
