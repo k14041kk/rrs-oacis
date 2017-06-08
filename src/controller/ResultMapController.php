@@ -26,10 +26,11 @@ class ResultMapController extends AbstractController{
 		
 		$this->addMapRank($teams, $mapName);
 		
-		$step = ['50','100','150','200','250'];
+		$stepSize = ResultHelper::getMapStep4Teams($teams, $mapName);
+		
+		$step = ResultHelper::getMapStepArray($stepSize);
 		
 		echo MapResultGeneration::generateHTML('2018', $simulatorID, $mapName, $teams,$step);
-		
 		
 		
 	}

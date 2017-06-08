@@ -28,6 +28,8 @@ class ResultTeam implements JsonSerializable{
 	
 	private $mapInitScores;
 	
+	private $mapStep;
+	
 	public function __construct(String $teamName)
 	{
 		
@@ -35,6 +37,7 @@ class ResultTeam implements JsonSerializable{
 		$this->maps = [];
 		$this->mapScores = [];
 		$this->mapInitScores = [];
+		$this->mapStep = [];
 		
 	}
 	
@@ -147,6 +150,14 @@ class ResultTeam implements JsonSerializable{
 	
 	public function getMapInitScores($mapName){
 		return $this->mapInitScores[$mapName];
+	}
+	
+	public function addMapStep($mapName,$step){
+		$this->mapStep[$mapName] = intval($step) - 2;
+	}
+	
+	public function getMapStep($mapName){
+		return $this->mapStep[$mapName];
 	}
 	
 	public function jsonSerialize()

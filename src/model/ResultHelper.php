@@ -72,6 +72,8 @@ class ResultHelper{
 			
 			$team->addMapInitScores($m, self::getMapInitScores($simulatorID, $parameterID, $runID));
 			
+			$team->addMapStep($m, self::getMapStep($simulatorID, $parameterID, $runID));
+			
 			//echo self::getMapStep($simulatorID, $parameterID, $runID);
 			
 		}
@@ -166,23 +168,34 @@ class ResultHelper{
 	
 	public static function getMapStep($simulatorID, $parameterSetID, $runID){
 		
-		$rawData = 6.0;
+		$rawData = 7.0;
 		
-		$file_url = '~/oacis/public/Result_development/work/'.$simulatorID.'/'.$parameterSetID.'/'.$runID.'/';
-		
-		//get rescue score
+		//get map step file @see step_image_count.sh
 		$rawData2 =
-		@file_get_contents('~/oacis/public/Result_development/work');//'.$simulatorID.'/'.$parameterSetID.'/'.$runID.'/');
+		@file_get_contents('http://0.0.0.0:3000/Result_development/'.$simulatorID.'/'.$parameterSetID.'/'.$runID.'/'.Config::MAP_LOG.'/step_count.txt');
 		
-		$files1 = @scandir('~/oacis/public/Result_development/work');
-		print_r($files1);
-		
-		$iterator = glob($file_url.'*.png');
-		
-		if($rawData2!=null)$rawData = count($iterator);
+		if($rawData2!=null)$rawData = $rawData2;
 		
 		return $rawData;
 		
+		
+	}
+	
+	public static function getMapStep4Teams($teams,$maps){
+		foreach ($teams as $key => $value){
+			return intval($value->getMapStep($maps));
+		}
+	}
+	
+	public static function getMapStepArray($stepSize){
+		
+		$a = [];
+		
+		for($i=1;$i<=$stepSize;$i++){
+			$a[] = $i *50;
+		}
+		
+		return $a;
 		
 	}
 	
