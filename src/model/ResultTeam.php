@@ -30,7 +30,10 @@ class ResultTeam implements JsonSerializable{
 	
 	private $mapStep;
 	
-	public function __construct(String $teamName)
+	//HTML Download 
+	private $download = false;
+	
+	public function __construct(String $teamName, $download=false)
 	{
 		
 		$this->teamName = $teamName;
@@ -38,6 +41,8 @@ class ResultTeam implements JsonSerializable{
 		$this->mapScores = [];
 		$this->mapInitScores = [];
 		$this->mapStep = [];
+		
+		$this->download =$download;
 		
 	}
 	
@@ -158,6 +163,10 @@ class ResultTeam implements JsonSerializable{
 	
 	public function getMapStep($mapName){
 		return $this->mapStep[$mapName];
+	}
+	
+	public function isDownload(){
+		return $this->download;
 	}
 	
 	public function jsonSerialize()
